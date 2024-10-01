@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# US Citizenship Test Practice
+
+## Overview
+
+The US Citizenship Test Practice is a web application designed to help users prepare for the United States citizenship test. This interactive quiz app provides a platform for users to test their knowledge of U.S. history, government, and civic responsibilities, which are essential components of the naturalization process.
+
+## Features
+
+- User Authentication: Sign up and sign in functionality for personalized experience.
+- Interactive Quiz: Randomly generated questions from a database of citizenship test questions.
+- Progress Tracking: Keep track of correct answers and overall progress.
+- Explanations: Detailed explanations for each question to enhance learning.
+- Responsive Design: Works seamlessly on desktop and mobile devices.
+
+## Technology Stack
+
+- Frontend: React.js with Next.js framework
+- Backend: Next.js API routes
+- Database: MongoDB
+- Authentication: NextAuth.js
+- Styling: Tailwind CSS and DaisyUI
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js (v14 or later)
+- npm or yarn
+- MongoDB database
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
+   ```
+   git clone https://github.com/your-username/us-citizenship-test-practice.git
+   cd us-citizenship-test-practice
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-## Learn More
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory and add the following:
+   ```
+   MONGODB_URI=your_mongodb_connection_string
+   NEXTAUTH_SECRET=your_nextauth_secret
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Run the development server:
+   ```
+   npm run dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Usage
 
-## Deploy on Vercel
+1. **Sign Up/Sign In**: 
+   - Navigate to the Sign Up page to create a new account.
+   - If you already have an account, use the Sign In option.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Taking the Quiz**:
+   - After signing in, you'll be directed to the quiz page.
+   - Questions are presented one at a time.
+   - Select an answer and click "Submit" to move to the next question.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Viewing Explanations**:
+   - After answering a question, you can view the explanation by clicking the "Show Explanation" button.
+
+4. **Tracking Progress**:
+   - Your progress is automatically saved and displayed, showing the number of correct answers and total questions attempted.
+
+5. **Completing the Quiz**:
+   - After answering all questions, you'll see your final score and have the option to retake the quiz.
+
+## Project Structure
+
+- `app/`: Contains the main application code
+  - `components/`: React components used throughout the app
+  - `pages/`: Next.js pages for routing
+  - `api/`: API routes for backend functionality
+- `lib/`: Utility functions and database connection
+- `models/`: MongoDB schema definitions
+- `public/`: Static assets
+
+## Key Components
+
+1. Sign Up Component:
+   - Handles user registration and authentication.
+   - Uses NextAuth for secure authentication.
+
+2. Quiz Component:
+   - Displays questions randomly from a database.
+   - Tracks user answers and provides immediate feedback.
+
+3. Progress Tracking:
+   - Stores user progress in MongoDB.
+   - Displays progress on the quiz page.
