@@ -25,7 +25,7 @@ export default function SignUp() {
         }
 
         try {
-            const endpoint = '/api/register'
+            const endpoint = isSignIn ? '/api/signin' : '/api/register'
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Question from '@components/Question';
 import ProgressTracker from '@components/ProgressTracker';
 
@@ -9,6 +10,7 @@ export default function Quiz() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [correctAnswers, setCorrectAnswers] = useState(0);
     const [userName, setUserName] = useState('');
+    const router = useRouter();
 
     useEffect(() => {
         fetchQuestions();
@@ -30,6 +32,11 @@ export default function Quiz() {
         }
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         saveProgress();
+    }
+
+    function handleSignOut() {
+        localStorage.removeItem('userName');
+        router.push('/pages/signin');
     }
 
     async function saveProgress() {
@@ -57,6 +64,7 @@ export default function Quiz() {
                 onAnswer={handleAnswer}
             />
             <ProgressTracker userName={userName} correctAnswers={correctAnswers} totalQuestions={currentQuestionIndex} />
+            <button onClick={handleSignOut} className='btn btn-secondary mt-4'>Sign Out</button>
         </div>
     );
 }

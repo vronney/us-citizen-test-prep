@@ -1,22 +1,27 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import getMongoClient from '@/lib/mongodb';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'GET') {
-    try {
-      const client = await getMongoClient();
-      const db = client.db("QuestionSchema");
-      const questions = await db.collection("questions").aggregate([
-        { $sample: { size: 20 } }
-      ]).toArray();
+export async function GET() {
+  try {
+    const client = await getMongoClient();
+    const db = client.db("QuestionSchema");
+    const questions = await db.collection("questions").aggregate([
+      { $sample: { size: 20 } }
+    ]).toArray();
 
-      res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
-
-      res.status(200).json(questions);
-    } catch (error) {
-      res.status(500).json({ error: 'Unable to fetch questions' });
-    }
-  } else {
-    res.status(405).json({ error: 'Method not allowed' });
+    return new NextResponse(JSON.stringify(questions), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 's-maxage=3600, stale-while-revalidate'
+      }
+    });
+  } catch (error) {
+    return new NextResponse(JSON.stringify({ error: 'Unable to fetch questions' }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
   }
 }

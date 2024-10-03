@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
         const db = client.db("UserProgressSchema")
 
         // Check if user already exists
-        const existingUser = await db.collection('userProgress').findOne({ email })
+        const existingUser = await db.collection('users').findOne({ email })
         if (existingUser) {
             return NextResponse.json({ message: 'User already exists' }, { status: 400 })
         }
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
             progress: [],
         })
 
-        return NextResponse.json({ message: 'User created successfully' }, { status: 201 })
+        return NextResponse.json({ message: 'User registered successfully' }, { status: 201 })
     } catch (error) {
         console.error(error)
         return NextResponse.json({ message: 'An error occurred during registration' }, { status: 500 })

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Explanation from './Explanation';
 
 interface QuestionData {
-    question: string;
+    question_text: string;
     answers: string[];
     correctAnswer: string;
     explanation: string;
@@ -26,7 +26,7 @@ export default function Question({ question, onAnswer }: { question: QuestionDat
 
     return (
         <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4">{question.question}</h3>
+            <h3 className="text-xl font-semibold mb-4">{question.question_text}</h3>
             <ul className="space-y-2">
                 {question.answers.map((answer: string, index: number) => (
                     <li key={index}>
