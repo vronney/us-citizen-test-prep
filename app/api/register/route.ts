@@ -4,9 +4,9 @@ import bcrypt from 'bcryptjs'
 
 export async function POST(req: NextRequest) {
     try {
-        const { email, password } = await req.json()
+        const { email, password, name } = await req.json()
 
-        if (!email || !password) {
+        if (!email || !password || !name) {
             return NextResponse.json({ message: 'Email and password are required' }, { status: 400 })
         }
 
@@ -26,13 +26,16 @@ export async function POST(req: NextRequest) {
         const result = await db.collection('users').insertOne({
             email,
             password: hashedPassword,
+            name,
             createdAt: new Date(),
         })
 
         // Create user progress document
         await db.collection('userProgress').insertOne({
             userId: result.insertedId,
-            progress: [],
+            correctAnswers: 0,
+            totalQuestions: 0,
+            lastQuizDate: null,
         })
 
         return NextResponse.json({ message: 'User registered successfully' }, { status: 201 })

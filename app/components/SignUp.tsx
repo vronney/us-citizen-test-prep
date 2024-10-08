@@ -2,11 +2,15 @@
 
 import { useState, FormEvent } from "react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 
-export default function SignUp() {
+interface onSighUpProps {
+    onSignUp: (name: string) => void
+}
+
+export default function SignUp({ onSignUp }: onSighUpProps) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [name, setName] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
@@ -17,6 +21,10 @@ export default function SignUp() {
         e.preventDefault()
         setError('')
         setIsLoading(true)
+
+        if (name.trim() === '') {
+            setName(name.trim())
+        }
 
         if (!isSignIn && password !== confirmPassword) {
             setError("Passwords don't match")
@@ -29,7 +37,7 @@ export default function SignUp() {
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, password, name }),
             })
 
             const data = await response.json()
@@ -37,11 +45,10 @@ export default function SignUp() {
             if (response.ok) {
                 if (isSignIn) {
                     // Handle successful sign-in
-                    router.push('/pages/quiz')
+                    router.push(`/pages/quiz`);
                 } else {
                     // Handle successful registration
-                    setIsSignIn(true) // Switch to sign-in mode
-                    setError('Registration successful. Please sign in.')
+                    resetFormForSignIn();
                 }
             } else {
                 setError(data.message || `An error occurred during ${isSignIn ? 'sign in' : 'registration'}`)
@@ -54,10 +61,34 @@ export default function SignUp() {
         }
     }
 
+    const resetFormForSignIn = () => {
+        setIsSignIn(true)
+        setPassword('')
+        setConfirmPassword('')
+        // Email is kept as is
+        setError('')
+    }
+
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
             <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">{isSignIn ? 'Sign In' : 'Sign Up'}</h2>
+                {!isSignIn && (
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                            Name
+                        </label>
+                        <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="name"
+                            type="text"
+                            placeholder="Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                    </div>
+                )}
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                         Email
@@ -68,7 +99,10 @@ export default function SignUp() {
                         type="email"
                         placeholder="Email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                            localStorage.setItem('email', e.target.value);
+                        }}
                         required
                     />
                 </div>
