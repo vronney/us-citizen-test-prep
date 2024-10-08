@@ -26,7 +26,7 @@ export default function ProgressTracker({ userName, correctAnswers, totalQuestio
 
     if (totalQuestions === 0 && !isLoading) {
         return (
-            <div className="mt-8 p-4 bg-green-100 rounded-lg">
+            <div className="mt-8 p-4 bg-green-100 rounded-lg text-black">
                 <h3 className="text-xl font-semibold mb-2">Welcome, {userName}!</h3>
                 <p>You haven't attempted any questions yet. Start the quiz to begin tracking your progress.</p>
             </div>
@@ -34,7 +34,7 @@ export default function ProgressTracker({ userName, correctAnswers, totalQuestio
     }
 
     return (
-        <div className="mt-8 p-4 bg-gray-100 rounded-lg">
+        <div className="mt-8 p-4 bg-green-100 text-black rounded-lg">
             <h3 className="text-xl font-semibold mb-2">Your Progress, {userName}</h3>
             <p>Correct Answers: {correctAnswers}</p>
             <p>Total Questions Attempted: {totalQuestions}</p>
