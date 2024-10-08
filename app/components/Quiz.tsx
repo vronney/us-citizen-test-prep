@@ -79,19 +79,19 @@ export default function Quiz({ id }: { id: string }) {
 
     if (currentQuestionIndex >= questions.length) {
         return (
-            <div>
+            <div className='p-6 max-w-2xl mx-auto'>
                 <h2 className="text-2xl font-bold mb-4">Quiz Completed!</h2>
-                <p>You answered {correctAnswers} out of {questions.length} questions correctly.</p>
+                <p className='text-black'>You answered {correctAnswers} out of {questions.length} questions correctly.</p>
                 <ProgressTracker userName={userName} correctAnswers={correctAnswers} totalQuestions={totalQuestions} isLoading={isLoading} />
-                <button onClick={() => router.push('/pages/quiz')} className="btn btn-primary mt-4">Retake Quiz</button>
+                <button onClick={() => router.push('/pages/quiz')} className="btn btn-primary my-4">Retake Quiz</button>
             </div>
         );
     }
 
     return (
-        <div>
+        <div className='p-6 max-w-2xl mx-auto'>
             <ProgressTracker userName={userName} correctAnswers={correctAnswers} totalQuestions={totalQuestions} isLoading={isLoading} />
-            <button onClick={handleSignOut} className='btn btn-secondary mt-4'>Sign Out</button>
+            <button onClick={handleSignOut} className='btn btn-secondary my-4'>Sign Out</button>
             <Question
                 question={questions[currentQuestionIndex]}
                 onAnswer={handleAnswer}

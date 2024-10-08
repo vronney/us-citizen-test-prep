@@ -3,11 +3,7 @@
 import { useState, FormEvent } from "react"
 import { useRouter } from "next/navigation"
 
-interface onSighUpProps {
-    onSignUp: (name: string) => void
-}
-
-export default function SignUp({ onSignUp }: onSighUpProps) {
+export default function SignUp() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')

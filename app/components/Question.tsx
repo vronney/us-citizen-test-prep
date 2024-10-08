@@ -17,7 +17,7 @@ export default function Question({ question, onAnswer, onNextQuestion }: { quest
         : [...question.random_answers, question.correct_answer];
     const shuffledAnswers = allAnswers.sort(() => Math.random() - 0.5);
 
-    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+    const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
     const [showResult, setShowResult] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
     const [answers, setAnswers] = useState(shuffledAnswers);
@@ -30,26 +30,35 @@ export default function Question({ question, onAnswer, onNextQuestion }: { quest
     });
 
     useEffect(() => {
-        setSelectedAnswer(null);
+        setSelectedAnswers([]);
         setShowResult(false);
         setIsCorrect(false);
         setAnswers([...question.random_answers, ...(Array.isArray(question.correct_answer) ? question.correct_answer : [question.correct_answer])]);
         setDoneAnswers([]);
     }, [question]);
 
+    function handleAnswerSelection(answer: string) {
+        setSelectedAnswers(prev =>
+            prev.includes(answer)
+                ? prev.filter(a => a !== answer)
+                : [...prev, answer]
+        );
+    }
+
     function handleSubmit() {
-        const correct = selectedAnswer === question.correct_answer;
+        const correct = Array.isArray(question.correct_answer)
+            ? question.correct_answer.every(a => selectedAnswers.includes(a)) &&
+            selectedAnswers.length === question.correct_answer.length
+            : selectedAnswers.includes(question.correct_answer);
         setIsCorrect(correct);
         setShowResult(true);
         onAnswer(correct);
 
-        if (selectedAnswer && !doneAnswers.includes(selectedAnswer)) {
-            setDoneAnswers([...doneAnswers, selectedAnswer]);
-        }
+        setDoneAnswers([...doneAnswers, ...selectedAnswers]);
     }
 
     function handleNextQuestion() {
-        setSelectedAnswer(null);
+        setSelectedAnswers([]);
         setShowResult(false);
         onNextQuestion();
     }
@@ -61,8 +70,8 @@ export default function Question({ question, onAnswer, onNextQuestion }: { quest
                 {sortedAnswers.map((answer, index) => (
                     <li key={index}>
                         <button
-                            className={`btn ${selectedAnswer === answer ? 'btn-primary' : 'btn-outline'}`}
-                            onClick={() => setSelectedAnswer(answer)}
+                            className={`btn ${selectedAnswers.includes(answer) ? 'btn-primary' : 'btn-outline'}`}
+                            onClick={() => handleAnswerSelection(answer)}
                             disabled={showResult || doneAnswers.includes(answer)}
                         >
                             {answer}
@@ -74,7 +83,7 @@ export default function Question({ question, onAnswer, onNextQuestion }: { quest
                 <button
                     className="btn btn-secondary"
                     onClick={handleSubmit}
-                    disabled={!selectedAnswer}
+                    disabled={!selectedAnswers.length}
                 >
                     Submit Answer
                 </button>
