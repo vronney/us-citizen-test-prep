@@ -85,7 +85,7 @@ export default function SignUp() {
                         <input
                             type="text"
                             name="name"
-                            className="input input-bordered w-full"
+                            className="input input-bordered w-full text-gray-700 bg-white"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
@@ -97,7 +97,7 @@ export default function SignUp() {
                     <input
                         type="email"
                         name="email"
-                        className="input input-bordered w-full"
+                        className="input input-bordered w-full text-gray-700 bg-white"
                         value={email}
                         onChange={(e) => {
                             setEmail(e.target.value);
@@ -111,7 +111,7 @@ export default function SignUp() {
                     <input
                         type="password"
                         name="password"
-                        className="input input-bordered w-full"
+                        className="input input-bordered w-full text-gray-700 bg-white"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -123,7 +123,7 @@ export default function SignUp() {
                         <input
                             type="password"
                             name="confirmPassword"
-                            className="input input-bordered w-full"
+                            className="input input-bordered w-full text-gray-700 bg-white"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required
@@ -135,10 +135,10 @@ export default function SignUp() {
                         <span>{error}</span>
                     </div>
                 )}
-                <button type="submit" className="btn btn-primary w-full mb-4">
+                <button type="submit" className="btn btn-primary w-full mb-4 text-white">
                     {isSignIn ? 'Sign In' : 'Sign Up'}
                 </button>
-                <p className="text-center">
+                <p className="text-center text-gray-700">
                     {isSignIn ? "Don't have an account? " : "Already have an account? "}
                     <button
                         type="button"
