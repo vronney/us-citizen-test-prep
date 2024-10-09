@@ -58,11 +58,6 @@ export default function Quiz({ id }: { id: string }) {
         saveProgress();
     }
 
-    function handleSignOut() {
-        localStorage.removeItem('email');
-        router.push('/');
-    }
-
     async function saveProgress() {
         const response = await fetch('/api/progress', {
             method: 'PUT',
@@ -91,7 +86,6 @@ export default function Quiz({ id }: { id: string }) {
     return (
         <div className='p-6 max-w-2xl mx-auto'>
             <ProgressTracker userName={userName} correctAnswers={correctAnswers} totalQuestions={totalQuestions} isLoading={isLoading} />
-            <button onClick={handleSignOut} className='btn btn-secondary my-4'>Sign Out</button>
             <Question
                 question={questions[currentQuestionIndex]}
                 onAnswer={handleAnswer}

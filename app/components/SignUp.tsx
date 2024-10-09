@@ -34,11 +34,15 @@ export default function SignUp() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password, name }),
+                credentials: 'include',
             })
 
             const data = await response.json()
 
             if (response.ok) {
+                localStorage.setItem('email', email);
+                localStorage.setItem('token', data.token);
+                setIsSignIn(true);
                 if (isSignIn) {
                     // Handle successful sign-in
                     router.push(`/pages/quiz`);
@@ -58,7 +62,7 @@ export default function SignUp() {
     }
 
     const resetFormForSignIn = () => {
-        setIsSignIn(true)
+        setIsSignIn(false)
         setPassword('')
         setConfirmPassword('')
         // Email is kept as is

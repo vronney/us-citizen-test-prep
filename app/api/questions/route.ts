@@ -1,7 +1,15 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import getMongoClient from '@/lib/mongodb';
+import { verifyJwtToken } from '@/lib/jwt';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // Get the token from the cookies
+  const token = request.cookies.get('token')?.value;
+
+  if (!token || !verifyJwtToken(token)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  
   try {
     const client = await getMongoClient();
     const db = client.db("QuestionSchema");

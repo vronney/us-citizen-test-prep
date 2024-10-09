@@ -64,7 +64,7 @@ export default function Question({ question, onAnswer, onNextQuestion }: { quest
     }
 
     return (
-        <div className="mb-8">
+        <div className="my-8">
             <h3 className="text-xl font-semibold mb-4">{question.question}</h3>
             <ul className="space-y-2 mb-4">
                 {sortedAnswers.map((answer, index) => (

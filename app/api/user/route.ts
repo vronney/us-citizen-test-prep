@@ -1,13 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import getMongoClient from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
+import { verifyJwtToken } from '@/lib/jwt';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const email = searchParams.get('email');
 
-    if (!email) {
-        return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+    // Get the token from the cookies
+    const token = request.cookies.get('token')?.value;
+
+    if (!token || !email || !verifyJwtToken(token)) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     try {

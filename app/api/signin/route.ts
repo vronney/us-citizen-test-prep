@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import getMongoClient from '@/lib/mongodb'
 import bcrypt from 'bcryptjs'
+import { signJwtToken } from '@/lib/jwt'
 
 export async function POST(req: NextRequest) {
     try {
@@ -25,9 +26,22 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 })
         }
 
-        // Here you would typically create a session or generate a JWT token
-        // For this example, we'll just return a success message
-        return NextResponse.json({ message: 'Sign in successful' }, { status: 200 })
+        // Generate JWT token
+        const token = signJwtToken({ id: user._id.toString() })
+
+        // Create a response with the token
+        const response = NextResponse.json({ message: 'Sign in successful', token }, { status: 200 })
+
+        // Set the token as a cookie
+        response.cookies.set('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 60 * 60, // 1 hour
+            path: '/',
+        })
+
+        return response
     } catch (error) {
         console.error(error)
         return NextResponse.json({ message: 'An error occurred during sign in' }, { status: 500 })
