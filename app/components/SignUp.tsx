@@ -65,20 +65,27 @@ export default function SignUp() {
         setError('')
     }
 
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-gray-100">
+                <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-t-blue-500 border-b-transparent border-r-transparent border-l-transparent rounded-full" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-6 text-center text-black">{isSignIn ? 'Sign In' : 'Sign Up'}</h2>
+        <div className="flex justify-center items-center min-h-screen bg-gray-50">
+            <form onSubmit={handleSubmit} className="w-full max-w-md bg-white shadow-lg rounded-lg p-8">
+                <h2 className="text-3xl font-semibold text-center mb-6 text-primary">{isSignIn ? 'Login' : 'Create Account'}</h2>
                 {!isSignIn && (
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                            Name
-                        </label>
+                        <label className="block text-gray-700 mb-2">Name</label>
                         <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 bg-white text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="name"
                             type="text"
-                            placeholder="Name"
+                            name="name"
+                            className="input input-bordered w-full"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
@@ -86,14 +93,11 @@ export default function SignUp() {
                     </div>
                 )}
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                        Email
-                    </label>
+                    <label className="block text-gray-700 mb-2">Email</label>
                     <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 bg-white text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="email"
                         type="email"
-                        placeholder="Email"
+                        name="email"
+                        className="input input-bordered w-full"
                         value={email}
                         onChange={(e) => {
                             setEmail(e.target.value);
@@ -103,55 +107,48 @@ export default function SignUp() {
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                        Password
-                    </label>
+                    <label className="block text-gray-700 mb-2">Password</label>
                     <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 bg-white text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                        id="password"
                         type="password"
-                        placeholder="******************"
+                        name="password"
+                        className="input input-bordered w-full"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
                 </div>
                 {!isSignIn && (
-                    <div className="mb-6">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
-                            Confirm Password
-                        </label>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 mb-2">Confirm Password</label>
                         <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 bg-white text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                            id="confirmPassword"
                             type="password"
-                            placeholder="******************"
+                            name="confirmPassword"
+                            className="input input-bordered w-full"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required
                         />
                     </div>
                 )}
-                {error && <p className="text-red-500 text-sm italic mb-4">{error}</p>}
-                <div className="flex items-center justify-between mb-4">
-                    <button
-                        className={`w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        type="submit"
-                        disabled={isLoading}
-                    >
-                        {isLoading ? (isSignIn ? 'Signing In...' : 'Signing Up...') : (isSignIn ? 'Sign In' : 'Sign Up')}
-                    </button>
-                </div>
-                <div className="text-center">
+                {error && (
+                    <div className="alert alert-error shadow-lg mb-4">
+                        <span>{error}</span>
+                    </div>
+                )}
+                <button type="submit" className="btn btn-primary w-full mb-4">
+                    {isSignIn ? 'Sign In' : 'Sign Up'}
+                </button>
+                <p className="text-center">
+                    {isSignIn ? "Don't have an account? " : "Already have an account? "}
                     <button
                         type="button"
                         onClick={() => setIsSignIn(!isSignIn)}
-                        className="text-blue-500 hover:text-blue-700"
+                        className="text-primary hover:underline"
                     >
-                        {isSignIn ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+                        {isSignIn ? 'Sign Up' : 'Sign In'}
                     </button>
-                </div>
+                </p>
             </form>
         </div>
-    )
+    );
 }

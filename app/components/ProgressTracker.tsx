@@ -12,6 +12,7 @@ interface ProgressTrackerProps {
 
 export default function ProgressTracker({ userName, correctAnswers, totalQuestions, isLoading }: ProgressTrackerProps) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const progressPercentage = (correctAnswers / totalQuestions) * 100;
 
     if (isLoading) {
         return (
@@ -39,6 +40,13 @@ export default function ProgressTracker({ userName, correctAnswers, totalQuestio
             <p>Correct Answers: {correctAnswers}</p>
             <p>Total Questions Attempted: {totalQuestions}</p>
             <p>Accuracy: {((correctAnswers / totalQuestions) * 100).toFixed(2)}%</p>
+
+            <div className="flex flex-col items-center mt-6">
+                <div className="w-full bg-gray-200 rounded-full h-4 dark:bg-gray-700">
+                    <div className="bg-green-500 h-4 rounded-full" style={{ width: `${progressPercentage}%` }}></div>
+                </div>
+                <span className="text-sm mt-2">{`Progress: ${correctAnswers}/${totalQuestions} (${progressPercentage.toFixed(1)}%)`}</span>
+            </div>
         </div>
     );
 }

@@ -1,7 +1,7 @@
 export default function Explanation({ correctAnswer }: { correctAnswer: string }) {
     return (
-        <div className="mt-4 p-4 bg-white text-black rounded-lg">
-            <h4 className="font-semibold mb-2">Explanation:</h4>
+        <div className="border border-red-300 bg-red-50 p-4 rounded-lg mt-4">
+            <h3 className="text-red-600 font-bold mb-2">Explanation</h3>
             <p>{correctAnswer}</p>
         </div>
     );

@@ -60,7 +60,7 @@ export default function Quiz({ id }: { id: string }) {
 
     function handleSignOut() {
         localStorage.removeItem('email');
-        router.push('/pages/signin');
+        router.push('/pages/signup');
     }
 
     async function saveProgress() {
