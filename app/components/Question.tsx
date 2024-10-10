@@ -12,9 +12,19 @@ interface QuestionData {
 }
 
 export default function Question({ question, onAnswer, onNextQuestion }: { question: QuestionData, onAnswer: (isCorrect: boolean) => void, onNextQuestion: () => void }) {
-    const allAnswers = Array.isArray(question.correct_answer)
-        ? [...question.random_answers, ...question.correct_answer]
-        : [...question.random_answers, question.correct_answer];
+    // Check if question is defined
+    if (!question) {
+        return <div>Loading question...</div>;
+    }
+
+    // Ensure correct_answer and random_answers exist
+    const correctAnswer = question.correct_answer || [];
+    const randomAnswers = question.random_answers || [];
+
+    // Combine correct_answer and random_answers
+    const allAnswers = Array.isArray(correctAnswer)
+        ? [...randomAnswers, ...correctAnswer]
+        : [...randomAnswers, correctAnswer];
     const shuffledAnswers = allAnswers.sort(() => Math.random() - 0.5);
 
     const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);

@@ -1,8 +1,5 @@
 'use client';
 
-import Link from "next/link";
-import { useState, useEffect } from "react";
-
 interface ProgressTrackerProps {
     userName: string;
     correctAnswers: number;
@@ -11,7 +8,6 @@ interface ProgressTrackerProps {
 }
 
 export default function ProgressTracker({ userName, correctAnswers, totalQuestions, isLoading }: ProgressTrackerProps) {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const progressPercentage = (correctAnswers / totalQuestions) * 100;
 
     if (isLoading) {

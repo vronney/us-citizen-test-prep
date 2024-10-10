@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { verifyJwtToken } from '@lib/jwt';
+import { verifyJwtToken } from './jwt';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -16,22 +16,16 @@ export function middleware(request: NextRequest) {
   // Get the token from the cookies
   const token = request.cookies.get('token')?.value;
 
-  // If there's no token, return unauthorized for API routes
+  // If there's no token, redirect to signup
   if (!token) {
-    if (pathname.startsWith('/api/')) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
     return NextResponse.redirect(new URL('/pages/signup', request.url));
   }
 
   // Verify the token
   const payload = verifyJwtToken(token);
 
-  // If the token is invalid, return unauthorized for API routes
+  // If the token is invalid, redirect to signup
   if (!payload) {
-    if (pathname.startsWith('/api/')) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
     return NextResponse.redirect(new URL('/pages/signup', request.url));
   }
 

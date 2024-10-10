@@ -31,9 +31,17 @@ export async function POST(req: NextRequest) {
 
         // Create a response with the token
         const response = NextResponse.json({ message: 'Sign in successful', token }, { status: 200 })
-
         // Set the token as a cookie
         response.cookies.set('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 60 * 60, // 1 hour
+            path: '/',
+        })
+
+        // Set the email as a separate cookie
+        response.cookies.set('email', email, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',

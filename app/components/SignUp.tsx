@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, FormEvent } from "react"
+import { useState, FormEvent, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useAuth } from "../contexts/AuthContext"
 
 export default function SignUp() {
     const [email, setEmail] = useState('')
@@ -12,14 +13,17 @@ export default function SignUp() {
     const [isLoading, setIsLoading] = useState(false)
     const [isSignIn, setIsSignIn] = useState(false)
     const router = useRouter()
+    const { setIsSignIn: setAuthIsSignIn, setToken } = useAuth();
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setError('')
         setIsLoading(true)
 
-        if (name.trim() === '') {
-            setName(name.trim())
+        if (!isSignIn && name.trim() === '') {
+            setError("Name is required for registration")
+            setIsLoading(false)
+            return
         }
 
         if (!isSignIn && password !== confirmPassword) {
@@ -34,22 +38,17 @@ export default function SignUp() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password, name }),
-                credentials: 'include',
             })
+            setIsLoading(true)
 
             const data = await response.json()
 
             if (response.ok) {
-                localStorage.setItem('email', email);
-                localStorage.setItem('token', data.token);
-                setIsSignIn(true);
-                if (isSignIn) {
-                    // Handle successful sign-in
-                    router.push(`/pages/quiz`);
-                } else {
-                    // Handle successful registration
-                    resetFormForSignIn();
-                }
+                setToken(data.token)
+                setAuthIsSignIn(true)
+
+                console.log("Sign-in successful, redirecting to quiz page...")
+                router.push('/pages/quiz')
             } else {
                 setError(data.message || `An error occurred during ${isSignIn ? 'sign in' : 'registration'}`)
             }
@@ -59,14 +58,6 @@ export default function SignUp() {
         } finally {
             setIsLoading(false)
         }
-    }
-
-    const resetFormForSignIn = () => {
-        setIsSignIn(false)
-        setPassword('')
-        setConfirmPassword('')
-        // Email is kept as is
-        setError('')
     }
 
     if (isLoading) {

@@ -2,22 +2,16 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+
 export default function Navbar() {
-    const { isSignIn, setIsSignIn } = useAuth();
+    const { isSignIn, setIsSignIn, setToken } = useAuth();
     const router = useRouter();
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsSignIn(!!token);
-    }, [setIsSignIn]);
-
     const handleSignOut = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('email');
+        setToken(null);
         setIsSignIn(false);
-        router.push('/pages/signout');
+        router.push('/');
     };
 
     return (
