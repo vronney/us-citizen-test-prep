@@ -105,11 +105,7 @@ export default function Question({ question, onAnswer, onNextQuestion }: { quest
                     </div>
                     {!isCorrect && (
                         <Explanation
-                            correctAnswer={
-                                Array.isArray(question.correct_answer)
-                                    ? question.correct_answer.join(', ')
-                                    : question.correct_answer
-                            }
+                            correctAnswer={question.explanation}
                         />
                     )}
                     <button className="btn btn-primary mt-4" onClick={handleNextQuestion}>
