@@ -51,3 +51,27 @@ export async function PUT(request: Request) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
+
+export async function PATCH(request: Request) {
+    try {
+        const { userId } = await request.json();
+        const client = await getMongoClient();
+        const db = client.db("UserProgressSchema");
+
+        const result = await db.collection("userProgress").updateOne(
+            { userId: new ObjectId(userId) },
+            { 
+                $set: { correctAnswers: 0, totalQuestions: 0, lastQuizDate: new Date() }
+            }
+        );
+
+        if (result.matchedCount === 0) {
+            return NextResponse.json({ error: 'Failed to reset user progress' }, { status: 400 });
+        }
+
+        return NextResponse.json({ success: true, message: 'Progress reset successfully' }, { status: 200 });
+    } catch (error) {
+        console.error('Error resetting user progress:', error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}

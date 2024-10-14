@@ -126,6 +126,31 @@ export default function Quiz() {
         saveProgress();
     }
 
+    async function handleQuizCompletion() {
+        try {
+            const response = await fetch('/api/progress', {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                console.log('Progress reset successfully');
+                setCorrectAnswers(0);
+                setTotalQuestions(0);
+                setCurrentQuestionIndex(0);
+                await fetchQuestions();
+            } else {
+                console.error('Failed to reset progress');
+            }
+        } catch (error) {
+            console.error('Error resetting progress:', error);
+        }
+    }
+
     async function saveProgress() {
         const response = await fetch('/api/progress', {
             method: 'PUT',
@@ -155,11 +180,11 @@ export default function Quiz() {
 
     if (currentQuestionIndex >= questions.length) {
         return (
-            <div className='p-6 max-w-2xl mx-auto'>
+            <div className='p-6 max-h-screen max-w-2xl mx-auto'>
                 <h2 className="text-2xl font-bold mb-4">Quiz Completed!</h2>
                 <p className='text-black'>You answered {correctAnswers} out of {questions.length} questions correctly.</p>
                 <ProgressTracker userName={userName} correctAnswers={correctAnswers} totalQuestions={totalQuestions} isLoading={isLoading} />
-                <button onClick={() => router.push('/pages/quiz')} className="btn btn-primary my-4">Retake Quiz</button>
+                <button onClick={handleQuizCompletion} className="btn btn-primary my-4">Retake Quiz</button>
             </div>
         );
     }
